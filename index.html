@@ -19,15 +19,42 @@
         const examNo = document.getElementById('examNo').value.trim();
         const dob = document.getElementById('dob').value; // yyyy-mm-dd
 
-        fetch('students.csv')
-          .then(response => response.text())
+        fetch('results.csv')
+          .then(response => {
+            if (!response.ok) throw new Error('CSV file not found');
+            return response.text();
+          })
           .then(data => {
-            const rows = data.split('\n');
+            const rows = data.split('\n').filter(row => row.trim() !== '');
             for (let i = 1; i < rows.length; i++) {
               const row = rows[i].split(',');
-              const csvDob = row[1].trim(); // dd/mm/yyyy
+              if (row.length < 6) continue; // skip invalid rows
+              const csvDob = row[1].trim();
               if (row[0].trim() === examNo && formatDob(csvDob) === dob) {
                 document.getElementById('result').innerHTML = `
-                  Name: ${row[
+                  Name: ${row[2]}<br>
+                  BIO: ${row[3]}<br>
+                  PHY: ${row[4]}<br>
+                  Chem: ${row[5]}
+                `;
+                return;
+              }
+            }
+            document.getElementById('result').innerHTML = 'No match found';
+          })
+          .catch(error => {
+            document.getElementById('result').innerHTML = 'Error: ' + error.message;
+            console.error(error);
+          });
+      };
+
+      function formatDob(dob) {
+        const parts = dob.split('/');
+        return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+      }
+    });
+  </script>
+</body>
+</html>
 
 
