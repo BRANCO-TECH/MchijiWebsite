@@ -1,29 +1,15 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Exam Results</title>
+</head>
 <body>
-  <form id="check-form">
-    Exam No.: <input id="exam_no" />
-    DOB: <input id="dob" />
-    <button type="submit">Check</button>
-  </form>
+  <h1>Exam Results</h1>
+  Exam No: <input id="examNo" type="text">
+  DOB: <input id="dob" type="text">
+  <button onclick="checkResult()">Check</button>
   <div id="result"></div>
-
-  <script>
-    document.getElementById('check-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const examNo = document.getElementById('exam_no').value;
-      const dob = document.getElementById('dob').value;
-      const response = await fetch('results.csv');
-      const csv = await response.text();
-      const rows = csv.split('\n').map(row => row.split(','));
-      const match = rows.find(r => r[0] === examNo && r[1] === dob);
-      if (match) {
-        document.getElementById('result').innerText = `Results: Bio=${match[2]}, Phy=${match[3]}, Chem=${match[4]}`;
-      } else {
-        document.getElementById('result').innerText = 'No match found.';
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
 
