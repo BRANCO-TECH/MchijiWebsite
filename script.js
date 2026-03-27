@@ -1,7 +1,7 @@
 
 function checkResult() {
-  const examNo = document.getElementById('examNo').value;
-  const dob = document.getElementById('dob').value;
+  const examNo = document.getElementById('examNo').value.trim();
+  const dob = document.getElementById('dob').value.trim();
 
   fetch('students.csv')
     .then(response => response.text())
