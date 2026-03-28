@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html>
 <body>
@@ -21,14 +20,14 @@
         .then(r => r.text())
         .then(data => {
           const rows = data.split('\n');
-          const headers = rows[1].split(','); // row 2 for headers
+          const headers = rows[1].split(',').slice(4, 58); // row 2, cols E–BF (index 4–57)
           for (let row of rows) {
             const cols = row.split(',');
             if (cols[1].trim() === examNo && cols[2].trim() === dob) {
               let html = `<h3>${cols[3]}</h3>`;
               html += `<table border="1">`;
               headers.forEach((header, i) => {
-                html += `<tr><th>${header}</th><td>${cols[i] || ''}</td></tr>`;
+                html += `<tr><th>${header}</th><td>${cols[i + 4] || ''}</td></tr>`; // cols E–BF (4+)
               });
               html += `</table>`;
               document.getElementById('result').innerHTML = html;
