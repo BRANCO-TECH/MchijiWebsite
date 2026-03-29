@@ -36,13 +36,13 @@
           const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
           let html = `
             <div style="width: 800px; margin: auto; border: 1px solid black; padding: 20px; font-size: 14px; position: relative;">
-              <h2 style="text-align: center;">REPORT CARD</h2>
+              <h2 style="text-align: center; font-size: 24px; margin-bottom: 10px;">REPORT CARD</h2>
               <p><strong>Name:</strong> ${cols[nameIndex]}</p>
               <p><strong>Form:</strong> ${cols[formIndex]} <strong>Year:</strong> ${cols[yearIndex]}</p>
-              <p style="position: absolute; top: 20px; right: 20px; text-align: right;">
+              <p style="position: absolute; top: 60px; right: 20px; text-align: right;">
                 <strong>POSITION IN CLASS:</strong> ${cols[positionIndex]}
               </p>
-              <p style="position: absolute; top: 40px; right: 20px; text-align: right;">
+              <p style="position: absolute; top: 80px; right: 20px; text-align: right;">
                 <strong>REMARKS:</strong> ${cols[remarksIndex]}
               </p>
               <table border="1" width="100%" style="font-size: 14px; table-layout: fixed; word-wrap: break-word;">
@@ -70,7 +70,7 @@
 
           html += `
               </table>
-              <div style="padding-top: 5px; border-top: 1px solid black; font-size: 10px;">
+              <div style="padding-top: 5px; border-top: 1px solid black; font-size: 12px;">
                 <p><strong>HEADTEACHER:</strong> ${cols[headTeacherIndex]}</p>
                 <p><strong>BANK DETAILS FOR FEES PAYMENT:</strong> ${cols[bankDetailsIndex]}</p>
                 <p><strong>NEXT TERM OPENS ON:</strong> ${cols[nextTermIndex]}</p>
@@ -95,6 +95,7 @@
   </script>
 </body>
 </html>
+
 
 
 
