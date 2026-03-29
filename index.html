@@ -22,7 +22,7 @@
       for (let row of data.slice(2)) { // skip first two header rows
         const cols = row;
         if (cols.length < 58) continue;
-        if (cols[1]?.trim() === examNo && cols[2]?.trim() === dob) {
+        if (cols[0]?.trim() === examNo && cols[1]?.trim() === dob) { // correct indices for examNo & dob
           let html = `
             <div style="width: 600px; margin: auto; border: 1px solid black; padding: 10px;">
               <h2>CANDIDATE INFORMATION</h2>
@@ -71,5 +71,4 @@
   </script>
 </body>
 </html>
-
 
