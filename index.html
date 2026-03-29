@@ -18,16 +18,15 @@
 
     async function fillReportCard(csvUrl, examNo, dob) {
       const data = await loadCSV(csvUrl);
-      const headers = data[1]; // column names
       let found = false;
-      for (let row of data.slice(2)) { // skip header rows
+      for (let row of data.slice(1)) { // skip header
         const cols = row;
-        if (cols.length < 58) continue; // skip invalid rows
-        if (cols[1]?.trim() === examNo && cols[2]?.trim() === dob) {
+        if (cols.length < 40) continue;
+        if (cols[0]?.trim() === examNo && cols[1]?.trim() === dob) {
           let html = `
             <div style="width: 600px; margin: auto; border: 1px solid black; padding: 10px;">
               <h2>CANDIDATE INFORMATION</h2>
-              <p><strong>Name:</strong> ${cols[3]}</p>
+              <p><strong>Name:</strong> ${cols[2]}</p>
               <p><strong>Form:</strong> 1</p>
               <table border="1" width="100%">
                 <tr>
@@ -39,20 +38,19 @@
           `;
           const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
           subjects.forEach((subject, i) => {
-            const idx = i + 4;
             html += `
               <tr>
                 <td>${subject}</td>
-                <td>${cols[idx]}</td>
-                <td>${cols[idx + 13]}</td>
-                <td>${cols[idx + 26]}</td>
+                <td>${cols[3 + i]}</td> <!-- GRADE -->
+                <td>${cols[16 + i]}</td> <!-- POSITION -->
+                <td>${cols[29 + i]}</td> <!-- REMARKS -->
               </tr>
             `;
           });
           html += `
               </table>
-              <p><strong>POSITION IN CLASS:</strong> </p>
-              <p><strong>REMARKS:</strong> </p>
+              <p><strong>POSITION IN CLASS:</strong> ${cols[42]}</p>
+              <p><strong>REMARKS:</strong> ${cols[43]}</p>
             </div>
           `;
           document.getElementById('result').innerHTML = html;
