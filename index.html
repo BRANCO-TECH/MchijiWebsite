@@ -39,20 +39,21 @@
           `;
           const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
           subjects.forEach((subject, i) => {
+            const colIndex = 5 + (i * 4); // F, J, N, ... for AGGREGATE
             html += `
               <tr>
                 <td>${subject}</td>
-                <td>${cols[5 + i]}</td> <!-- AGGREGATE (%) -->
-                <td>${cols[18 + i]}</td> <!-- GRADE -->
-                <td>${cols[31 + i]}</td> <!-- POSITION -->
-                <td>${cols[44 + i]}</td> <!-- REMARKS -->
+                <td>${cols[colIndex]}</td> <!-- AGGREGATE (%) -->
+                <td>${cols[colIndex + 1]}</td> <!-- GRADE -->
+                <td>${cols[colIndex + 2]}</td> <!-- POSITION -->
+                <td>${cols[colIndex + 3]}</td> <!-- REMARKS -->
               </tr>
             `;
           });
           html += `
               </table>
-              <p><strong>POSITION IN CLASS:</strong> </p>
-              <p><strong>REMARKS:</strong> </p>
+              <p><strong>POSITION IN CLASS:</strong> ${cols[57]}</p>
+              <p><strong>REMARKS:</strong> ${cols[58]}</p>
             </div>
           `;
           document.getElementById('result').innerHTML = html;
@@ -73,4 +74,5 @@
   </script>
 </body>
 </html>
+
 
