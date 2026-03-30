@@ -1,5 +1,18 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @media (max-width: 600px) {
+      table {
+        font-size: 12px;
+      }
+      h2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
 <body>
   <h1>Check Exam Result</h1>
   Form: <select id="form">
@@ -15,15 +28,25 @@
 
   <script>
     async function loadCSV(url) {
-      const response = await fetch(url);
-      const text = await response.text();
-      const rows = text.split('\n').map(row => row.split(','));
-      return rows;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to load ${url}`);
+        const text = await response.text();
+        return text.split('\n').map(row => row.split(','));
+      } catch (e) {
+        console.error(e);
+        document.getElementById('result').innerHTML = `Error: ${e.message}`;
+        return [];
+      }
     }
 
     async function fillReportCard(form, examNo, dob) {
       const csvUrl = `form${form}.csv`;
       const data = await loadCSV(csvUrl);
+      if (data.length < 3) {
+        document.getElementById('result').innerHTML = 'CSV file has insufficient data';
+        return;
+      }
       let found = false;
       for (let row of data.slice(2)) {
         const cols = row;
@@ -31,17 +54,16 @@
         if (cols[1]?.trim() === examNo.trim() && cols[2]?.trim() === dob) {
           const nameIndex = 9;
           const formIndex = 0;
-          const termIndex = 3;  // Column D for Term
+          const termIndex = 3;
           const yearIndex = 4;
           const headTeacherIndex = 5;
           const bankDetailsIndex = 6;
           const nextTermIndex = 7;
           const positionIndex = 62;
           const remarksIndex = 63;
-
           const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
           let html = `
-            <div style="width: 800px; margin: auto; border: 1px solid black; padding: 20px; font-size: 14px; position: relative;">
+            <div style="max-width: 800px; width: 100%; margin: auto; border: 1px solid black; padding: 20px; font-size: 14px; position: relative;">
               <div style="text-align: center; margin-bottom: 10px;">
                 <h2 style="font-size: 24px; margin: 0;">REPORT CARD</h2>
                 <p style="font-size: 18px; margin: 0;">MCHINJI SECONDARY SCHOOL</p>
@@ -49,8 +71,8 @@
               <div style="margin-bottom: 10px;">
                 <p><strong>Name:</strong> ${cols[nameIndex]}</p>
                 <p>
-                  <strong>Form:</strong> ${cols[formIndex]} 
-                  <strong>Term:</strong> ${cols[termIndex] || 'N/A'} 
+                  <strong>Form:</strong> ${cols[formIndex]}
+                  <strong>Term:</strong> ${cols[termIndex] || 'N/A'}
                   <strong>Year:</strong> ${cols[yearIndex]}
                 </p>
               </div>
@@ -67,7 +89,6 @@
                   <th style="width: 30%;">REMARKS</th>
                 </tr>
           `;
-
           subjects.forEach((subject, i) => {
             const baseIndex = 10 + (i * 4);
             html += `
@@ -80,7 +101,6 @@
               </tr>
             `;
           });
-
           html += `
               </table>
               <div style="padding-top: 5px; border-top: 1px solid black; font-size: 12px;">
