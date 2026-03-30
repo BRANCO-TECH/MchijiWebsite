@@ -1,29 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="https:                                                                        
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
-      border: 1px solid      
-      padding: 8px;
-      text-align: center;
-    }
-    @media (max-width: 600px) {
-      table {
-        font-size: 12px;
-      }
-      th, td {
-        padding: 4px;
-      }
-    }
-  </style>
-</head>
 <body>
   <h1>Check Exam Result</h1>
   Form: <select id="form">
@@ -34,55 +10,88 @@
   </select><br><br>
   Exam No: <input id="examNo" type="text"><br><br>
   DOB: <input id="dob" type="date"><br><br>
-  <button id="checkBtn">Check</button>
+  <button onclick="checkResult()">Check</button>
   <div id="result"></div>
 
   <script>
     async function loadCSV(url) {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Failed to load ${url}: ${response.status}`);
-        const text = await response.text();
-        return text.split('\n').map(row => row.split(','));
-      } catch (e) {
-        console.error(e);
-        document.getElementById('result').innerHTML = `Error loading CSV: ${e.message}`;
-        return [];
-      }
+      const response = await fetch(url);
+      const text = await response.text();
+      const rows = text.split('\n').map(row => row.split(','));
+      return rows;
     }
 
     async function fillReportCard(form, examNo, dob) {
       const csvUrl = `form${form}.csv`;
       const data = await loadCSV(csvUrl);
-      if (data.length < 3) {
-        document.getElementById('result').innerHTML = 'CSV file has insufficient data';
-        return;
-      }
       let found = false;
       for (let row of data.slice(2)) {
-        if (row.length < 64) continue;
         const cols = row;
-        if (cols[1]?.trim() === examNo && cols[2]?.trim() === dob) {
-          found = true;
-          document.getElementById('result').innerHTML = `
-            <h2>REPORT CARD</h2>
-            <p><strong>Name:</strong> ${cols[9]}</p>
-            <p><strong>Form:</strong> ${form} Term: 2 Year: 2026</p>
-            <table>
-              <tr>
-                <th>SUBJECT</th>
-                <th>AGGREGATE (%)</th>
-                <th>GRADE</th>
-                <th>POSITION</th>
-                <th>REMARKS</th>
-              </tr>
-              <tr>
-                <td>AGRI</td><td>${cols[10]}</td><td>${cols[11]}</td><td>${cols[12]}</td><td>Fail</td>
-              </tr>
-              <!-- Add other subjects dynamically -->
-            </table>
-            <p><strong>HEADTEACHER:</strong> MR.J LUHANA | CELL: 0999441723</p>
+        if (cols.length < 64) continue;
+        if (cols[1]?.trim() === examNo.trim() && cols[2]?.trim() === dob) {
+          const nameIndex = 9;
+          const formIndex = 0;
+          const termIndex = 3;  // Column D for Term
+          const yearIndex = 4;
+          const headTeacherIndex = 5;
+          const bankDetailsIndex = 6;
+          const nextTermIndex = 7;
+          const positionIndex = 62;
+          const remarksIndex = 63;
+
+          const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
+          let html = `
+            <div style="width: 800px; margin: auto; border: 1px solid black; padding: 20px; font-size: 14px; position: relative;">
+              <div style="text-align: center; margin-bottom: 10px;">
+                <h2 style="font-size: 24px; margin: 0;">REPORT CARD</h2>
+                <p style="font-size: 18px; margin: 0;">MCHINJI SECONDARY SCHOOL</p>
+              </div>
+              <div style="margin-bottom: 10px;">
+                <p><strong>Name:</strong> ${cols[nameIndex]}</p>
+                <p>
+                  <strong>Form:</strong> ${cols[formIndex]} 
+                  <strong>Term:</strong> ${cols[termIndex] || 'N/A'} 
+                  <strong>Year:</strong> ${cols[yearIndex]}
+                </p>
+              </div>
+              <div style="position: absolute; top: 60px; right: 20px; text-align: right;">
+                <p><strong>POSITION IN CLASS:</strong> ${cols[positionIndex]}</p>
+                <p><strong>REMARKS:</strong> ${cols[remarksIndex]}</p>
+              </div>
+              <table border="1" width="100%" style="font-size: 14px; table-layout: fixed; word-wrap: break-word;">
+                <tr>
+                  <th style="width: 20%;">SUBJECT</th>
+                  <th style="width: 20%;">AGGREGATE (%)</th>
+                  <th style="width: 15%;">GRADE</th>
+                  <th style="width: 15%;">POSITION</th>
+                  <th style="width: 30%;">REMARKS</th>
+                </tr>
           `;
+
+          subjects.forEach((subject, i) => {
+            const baseIndex = 10 + (i * 4);
+            html += `
+              <tr>
+                <td>${subject}</td>
+                <td>${cols[baseIndex]}</td>
+                <td>${cols[baseIndex + 1]}</td>
+                <td>${cols[baseIndex + 2]}</td>
+                <td>${cols[baseIndex + 3]}</td>
+              </tr>
+            `;
+          });
+
+          html += `
+              </table>
+              <div style="padding-top: 5px; border-top: 1px solid black; font-size: 12px;">
+                <p><strong>HEADTEACHER:</strong> ${cols[headTeacherIndex]}</p>
+                <p><strong>BANK DETAILS FOR FEES PAYMENT:</strong> ${cols[bankDetailsIndex]}</p>
+                <p><strong>NEXT TERM OPENS ON:</strong> ${cols[nextTermIndex]}</p>
+              </div>
+            </div>
+          `;
+          document.getElementById('result').innerHTML = html;
+          found = true;
           return;
         }
       }
@@ -97,17 +106,9 @@
       const dob = document.getElementById('dob').value.split('-').reverse().join('/'); // dd/mm/yyyy
       fillReportCard(form, examNo, dob);
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('checkBtn').addEventListener('click', checkResult);
-    });
   </script>
 </body>
 </html>
-
-
-
-
 
 
 
