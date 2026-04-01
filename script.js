@@ -1,3 +1,4 @@
+
 async function loadCSV(url) {
   try {
     const response = await fetch(url);
@@ -18,7 +19,7 @@ async function fillReportCard(form, examNo, password) {
   for (let row of data.slice(2)) {
     const cols = row;
     if (cols.length < 64) continue;
-    if (cols[1]?.trim() === examNo.trim() && cols[8]?.trim() === password) {
+    if (cols[1]?.trim() === examNo.trim() && password === "123456") {
       const nameIndex = 9;
       const formIndex = 0;
       const termIndex = 3;
@@ -72,7 +73,7 @@ async function fillReportCard(form, examNo, password) {
       return;
     }
   }
-  if (!found) document.getElementById('result').innerHTML = '<div class="card">No matching record found</div>';
+  if (!found) document.getElementById('result').innerHTML = '<div class="card">No matching record found or incorrect password</div>';
 }
 
 function checkResult() {
