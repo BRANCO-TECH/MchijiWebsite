@@ -1,26 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="card">
-    <h1>Check Exam Result</h1>
-    Form: <select id="form">
-      <option value="1">Form 1</option>
-      <option value="2">Form 2</option>
-      <option value="3">Form 3</option>
-      <option value="4">Form 4</option>
+
+<div class="card">
+  <h1>Check Exam Result</h1>
+  <button onclick="showDaySchoolOptions()">View Day School Results</button>
+  <button onclick="showODLOptions()">View ODL Results</button>
+  <div id="options" style="display: none;">
+    <select id="form">
+      <!-- options will be populated dynamically -->
     </select><br><br>
     Exam No: <input id="examNo" type="text"><br><br>
     Password: <input id="password" type="password"><br><br>
     <button onclick="checkResult()">Check</button>
   </div>
   <div id="result"></div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+</div>
 
 
