@@ -68,7 +68,7 @@ async function fillReportCard(form, examNo, password) {
       const nextTermIndex = 7;
       const positionIndex = 62;
       const remarksIndex = 63;
-      const subjects = ['AGRICULTURE', 'B/KNOWLEDGE', 'BIOLOGY', 'CHEMISTRY', 'CHICHEWA', 'H/ECONOMICS', 'ENGLISH', 'HISTORY', 'GEOGRAPHY', 'S/LIFE', 'MATHS', 'PHYSICS', 'COM/STUDIES'];
+      const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
       const schoolName = form.includes('ODL') ? 'MCHINJI SECONDARY SCHOOL ODL' : 'MCHINJI SECONDARY SCHOOL';
       let html = `
         <div class="card">
