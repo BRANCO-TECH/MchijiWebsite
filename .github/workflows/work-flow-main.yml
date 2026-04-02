@@ -1,4 +1,4 @@
-name: Deploy to public repozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+name: Deploy to public repo
 on:
   push:
     branches:
