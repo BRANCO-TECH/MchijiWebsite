@@ -12,7 +12,7 @@ jobs:
         run: |
           # Add your build commands here (if any)
       - name: Deploy to public repo
-        uses: cpina/github-action-push-to-another-repository@v1.4.0
+        uses: cpina/github-action-push-to-another-repository@v1.6
         with:
           source_dir: ./build
           destination_username: BRANCO-TECH
@@ -20,6 +20,6 @@ jobs:
           destination_repository_name: BRANCO-TECH/Mchinji-Secondary-Web-Portal
           destination_branch: main
           target_dir: .
-          github_token: ${{ secrets.workflowdeploy }}
+          github_token: ${{ secrets.gitToken }}
 
 
