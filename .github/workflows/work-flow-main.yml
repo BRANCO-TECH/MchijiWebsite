@@ -1,4 +1,4 @@
-name: Deploy to Public Repo
+name: Checkout repo
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build project
         run: |
           # Add your build commands here (if any)
