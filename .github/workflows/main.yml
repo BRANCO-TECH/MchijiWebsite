@@ -18,11 +18,11 @@ jobs:
       - name: Push to public repo
         uses: cpina/github-action-push-to-another-repository@v1.2
         with:
-          source-dir: 'build'
-          destination-git-username: 'BRANCO-TECH'
-          destination-git-email: 'mwaleb075@gmail.com'
-          destination-repository-name: 'BRANCO-TECH/Mchinji-Secondary-Web-Portal'
-          destination-branch: 'main'
+          source-directory: 'build'
+          destination-github-username: 'BRANCO-TECH'
+          user-email: 'mwaleb075@gmail.com'
+          destination-repository-username: 'BRANCO-TECH/Mchinji-Secondary-Web-Portal'
+          target-branch: 'main'
           ssh-key: ${{ secrets.SSH_DEPLOY_KEY }}
           commit-message: 'Deploy buil to public repo'
 
