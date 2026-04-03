@@ -18,12 +18,14 @@ function showDaySchoolOptions() {
   currentFormType = 'Day';
   const options = ['Form1', 'Form2', 'Form3', 'Form4'];
   populateOptions(options);
+  document.getElementById('instruction').style.display='block';
 }
 
 function showODLOptions() {
   currentFormType = 'ODL';
   const options = ['Form1ODL', 'Form2ODL', 'Form3ODL', 'Form4ODL'];
   populateOptions(options);
+  document.getElementById('instruction').style.display='block';
 }
 
 function populateOptions(options) {
