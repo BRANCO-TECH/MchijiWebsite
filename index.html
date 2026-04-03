@@ -1,145 +1,27 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @media (max-width: 600px) {
-      body { font-size: 12px; }
-      h2 { font-size: 16px; }
-      table { font-size: 11px; }
-    }
-    .card {
-      max-width: 800px;
-      width: 100%;
-      margin: auto;
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    table {
-      font-size: 10PX;
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-    th, td {
-      padding: 2px;
-      text-align: center;
-      font-size: 10px;
-      word-wrap: break-word;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="card">
     <h1>Check Exam Result</h1>
-    Form: <select id="form">
-      <option value="1">Form 1</option>
-      <option value="2">Form 2</option>
-      <option value="3">Form 3</option>
-      <option value="4">Form 4</option>
-    </select><br><br>
-    Exam No: <input id="examNo" type="text"><br><br>
-    DOB: <input id="dob" type="date"><br><br>
-    <button onclick="checkResult()">Check</button>
+    <button id="daySchoolBtn">View Day School Results</button>
+    <button id="odlBtn">View ODL Results</button>
+    <div id="options" style="display: none;">
+      <select id="form">
+        <!-- options will be populated dynamically -->
+      </select><br><br>
+      Exam No: <input id="examNo" type="text"><br><br>
+      Password: <input id="password" type="password"><br><br>
+      <button id="checkResultBtn">Check</button>
+    </div>
+    <div id="result"></div>
   </div>
-  <div id="result"></div>
 
-  <script>
-    async function loadCSV(url) {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Failed to load ${url}`);
-        const text = await response.text();
-        return text.split('\n').map(row => row.split(','));
-      } catch (e) {
-        console.error(e);
-        document.getElementById('result').innerHTML = `Error: ${e.message}`;
-        return [];
-      }
-    }
-
-    async function fillReportCard(form, examNo, dob) {
-      const csvUrl = `form${form}.csv`;
-      const data = await loadCSV(csvUrl);
-      let found = false;
-      for (let row of data.slice(2)) {
-        const cols = row;
-        if (cols.length < 64) continue;
-        if (cols[1]?.trim() === examNo.trim() && cols[2]?.trim() === dob) {
-          const nameIndex = 9;
-          const formIndex = 0;
-          const termIndex = 3;
-          const yearIndex = 4;
-          const headTeacherIndex = 5;
-          const bankDetailsIndex = 6;
-          const nextTermIndex = 7;
-          const positionIndex = 62;
-          const remarksIndex = 63;
-          const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
-          let html = `
-            <div class="card">
-              <div style="text-align: center;">
-                <h2>REPORT CARD</h2>
-                <p>MCHINJI SECONDARY SCHOOL</p>
-              </div>
-              <p><strong>Name:</strong> ${cols[nameIndex]}</p>
-              <p><strong>Form:</strong> ${cols[formIndex]} <strong>Term:</strong> ${cols[termIndex]} <strong>Year:</strong> ${cols[yearIndex]}</p>
-              <p><strong>POSITION IN CLASS:</strong> ${cols[positionIndex]}</p>
-              <p><strong>REMARKS:</strong> ${cols[remarksIndex]}</p>
-              <div style="overflow-x: auto;">
-                <table border="1">
-                  <tr>
-                    <th>SUBJECT</th>
-                    <th>AGGREGATE (%)</th>
-                    <th>GRADE</th>
-                    <th>POSITION</th>
-                    <th>REMARKS</th>
-                  </tr>
-                  ${subjects.map((subject, i) => {
-                    const baseIndex = 10 + (i * 4);
-                    return `
-                      <tr>
-                        <td>${subject}</td>
-                        <td>${cols[baseIndex]}</td>
-                        <td>${cols[baseIndex + 1]}</td>
-                        <td>${cols[baseIndex + 2]}</td>
-                        <td>${cols[baseIndex + 3]}</td>
-                      </tr>
-                    `;
-                  }).join('')}
-                </table>
-              </div>
-              <p><strong>HEADTEACHER:</strong> ${cols[headTeacherIndex]}</p>
-              <p><strong>BANK DETAILS FOR FEES PAYMENT:</strong> ${cols[bankDetailsIndex]}</p>
-              <p><strong>NEXT TERM OPENS ON:</strong> ${cols[nextTermIndex]}</p>
-            </div>
-          `;
-          document.getElementById('result').innerHTML = html;
-          found = true;
-          return;
-        }
-      }
-      if (!found) document.getElementById('result').innerHTML = '<div class="card">No matching record found</div>';
-    }
-
-    function checkResult() {
-      const form = document.getElementById('form').value;
-      const examNo = document.getElementById('examNo').value.trim();
-      const dob = document.getElementById('dob').value.split('-').reverse().join('/');
-      fillReportCard(form, examNo, dob);
-    }
-  </script>
+  <script src="script.js" defer></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
