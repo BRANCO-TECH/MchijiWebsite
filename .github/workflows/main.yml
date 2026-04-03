@@ -16,5 +16,5 @@ jobs:
           fetch-depth: 0
       - name: Push to Public
         run: |
-          git remote add public https://${{ secrets.SYNC_PAT }}:@github.com/BRANCO-TECH/Mchinji-Secondary-Web-Portal.git
+          git remote add public https://${{ secrets.SYNC_PAT }}:@github.com/BRANCO-TECH/Mchinji-Secondary-Web-Portal
           git push public main --force
