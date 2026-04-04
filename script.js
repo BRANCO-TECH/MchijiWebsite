@@ -1,3 +1,46 @@
+const script = document.createElement('script');
+script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js';
+document.head.appendChild(script);
+
+let currentFormType = '';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const daySchoolBtn = document.getElementById('daySchoolBtn');
+  const odlBtn = document.getElementById('odlBtn');
+  const checkResultBtn = document.getElementById('checkResultBtn');
+  
+  if (daySchoolBtn && odlBtn && checkResultBtn) {
+    daySchoolBtn.addEventListener('click', showDaySchoolOptions);
+    odlBtn.addEventListener('click', showODLOptions);
+    checkResultBtn.addEventListener('click', checkResult);
+  }
+});
+
+function showDaySchoolOptions() {
+  currentFormType = 'Day';
+  const options = ['Form1', 'Form2', 'Form3', 'Form4'];
+  populateOptions(options);
+}
+
+function showODLOptions() {
+  currentFormType = 'ODL';
+  const options = ['Form1ODL', 'Form2ODL', 'Form3ODL', 'Form4ODL'];
+  populateOptions(options);
+}
+
+function populateOptions(options) {
+  document.getElementById('options').style.display = 'block';
+  const select = document.getElementById('form');
+  select.innerHTML = '<option value="" disabled selected>-- Choose Form --</option>';
+  
+  options.forEach(option => {
+    const opt = document.createElement('option');
+    opt.value = option;
+    opt.text = option.replace('ODL', ' ODL');
+    select.add(opt);
+  });
+}
+
 async function loadCSV(url) {
   try {
     const response = await fetch(url);
@@ -20,7 +63,6 @@ async function loadCSV(url) {
     return data;
   } catch (e) {
     console.error(e);
-    // CHANGED: Removed <div class="card"> from error message so it doesn't get a green border
     document.getElementById('result').innerHTML = `<p style="color:red; text-align:center;">Error loading data: ${e.message}</p>`;
     return [];
   }
@@ -58,7 +100,6 @@ async function fillReportCard(form, examNo, password) {
             <p><strong>${schoolName}</strong></p>
           </div>
           
-          <!-- Flexbox for Top Left and Top Right -->
           <div style="display: flex; justify-content: space-between; margin-top: 15px; margin-bottom: 15px; text-align: left; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 200px;">
               <p style="margin: 2px 0;"><strong>Name:</strong> ${cols[nameIndex] || '-'}</p>
@@ -118,7 +159,19 @@ async function fillReportCard(form, examNo, password) {
   }
   
   if (!found) {
-    // CHANGED: Removed <div class="card"> from error message
     document.getElementById('result').innerHTML = '<p style="color:red; text-align:center;">No matching record found or incorrect password</p>';
   }
+}
+
+function checkResult() {
+  const form = document.getElementById('form').value;
+  const examNo = document.getElementById('examNo').value.trim();
+  const password = document.getElementById('password').value.trim();
+  
+  if(!form || !examNo || !password) {
+    alert("Please fill in all fields.");
+    return;
+  }
+  
+  fillReportCard(form, examNo, password);
 }

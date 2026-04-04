@@ -1,5 +1,4 @@
-
-/* Added basic body styling */
+/* Basic body styling */
 body {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
@@ -7,22 +6,20 @@ body {
   padding: 20px;
 }
 
-/* FIXED: Added the dot before 'card' */
+/* Fixed: Removed 'overflow-x: auto;' so the menu can appear */
 .card {
   max-width: 800px;
   width: 100%;
   margin: 0 auto 20px auto;
-  border: 1px solid hsl(113, 100%, 31%);
+  border: 3px solid hsl(113, 100%, 31%);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  overflow-x: auto;
   text-align: center;
   background-color: #ffffff;
-  /* Removed display:flex because it breaks html2pdf library rendering */
 }
 
-/* Added styling for inputs and dropdowns */
+/* Styling for inputs and dropdowns */
 input, select {
   width: 60%;
   padding: 10px;
@@ -86,4 +83,12 @@ th {
   color: #555;
   font-style: italic;
   margin-bottom: 10px;
+}
+
+/* Added styling for the inner report card border */
+.report-card-inner {
+  border: 2px solid #000;
+  padding: 20px;
+  margin-bottom: 15px;
+  background-color: #fff;
 }
