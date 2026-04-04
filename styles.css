@@ -1,42 +1,89 @@
 
+/* Added basic body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 20px;
+}
+
+/* FIXED: Added the dot before 'card' */
 .card {
   max-width: 800px;
   width: 100%;
-  margin: auto;
+  margin: 0 auto 20px auto;
   border: 3px solid hsl(113, 100%, 31%);
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   overflow-x: auto;
-  text-align: center !important;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
+  background-color: #ffffff;
+  /* Removed display:flex because it breaks html2pdf library rendering */
 }
+
+/* Added styling for inputs and dropdowns */
+input, select {
+  width: 60%;
+  padding: 10px;
+  margin: 8px 0 16px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+label {
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-top: 10px;
+}
+
+/* Improved table styling */
 table {
-  font-size: 10px;
+  font-size: 12px;
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  margin-top: 15px;
 }
+
 th, td {
-  padding: 2px;
+  border: 1px solid #ddd;
+  padding: 8px;
   text-align: center;
-  font-size: 10px;
   word-wrap: break-word;
 }
-.green-btn{
+
+th {
+  background-color: hsl(113, 100%, 31%);
+  color: white;
+}
+
+/* Button styling */
+.green-btn {
   background-color: #4CAF50;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
-.green-btn:hover {background-color: #3e8e41; }
-.logo{
-  align-self: center;
-  width: 100px;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px;
 }
 
+.green-btn:hover {
+  background-color: #3e8e41;
+}
+
+.logo {
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+#instruction {
+  color: #555;
+  font-style: italic;
+  margin-bottom: 10px;
+}

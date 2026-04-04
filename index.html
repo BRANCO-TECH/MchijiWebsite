@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mchinji Secondary School - Exam Portal</title>
     <link rel="stylesheet" href="styles.css">
-    
 </head>
 <body>
 
@@ -20,41 +19,29 @@
             <button id="odlBtn" class="green-btn">ODL School Examination Results</button>
         </div>
 
-        <br><br>
+        <br>
 
         <!-- Input Section (Hidden by default) -->
         <div id="options" style="display: none;">
-            <p id="instruction" style="color:#666;">Select your form then enter your exam number and password below:</p>
+            <p id="instruction">Select your form then enter your exam number and password below:</p>
             
             <label for="form">Select Form:</label><br>
             <select id="form">
                 <option value="" disabled selected>-- Choose Form --</option>
-                <option value="1">Form 1</option>
-                <option value="2">Form 2</option>
-                <option value="3">Form 3</option>
-                <option value="4">Form 4</option>
             </select>
-            
-            <br><br>
             
             <label for="examNo">Exam No:</label><br>
             <input id="examNo" type="text" placeholder="Enter Exam Number">
             
-            <br><br>
-            
             <label for="password">Password:</label><br>
             <input id="password" type="password" placeholder="Enter Password">
-            
-            <br><br>
             
             <button id="checkResultBtn" class="green-btn">Check Result</button>
         </div>
 
         <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
     </div>
+    
     <script src="script.js" defer></script>
 </body>
 </html>
-
-
-
