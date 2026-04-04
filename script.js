@@ -47,9 +47,7 @@ async function loadCSV(url) {
     if (!response.ok) throw new Error(`Failed to load ${url}`);
     let text = await response.text();
     
-    // Fix: Remove Windows carriage returns to prevent blank cells on PC
     text = text.replace(/\r/g, ''); 
-    
     const rows = text.split('\n');
     const data = [];
     
@@ -59,7 +57,6 @@ async function loadCSV(url) {
         data.push(cols);
       }
     }
-    
     return data;
   } catch (e) {
     console.error(e);
@@ -75,8 +72,6 @@ async function fillReportCard(form, examNo, password) {
   
   for (let row of data.slice(2)) {
     const cols = row;
-    
-    // Updated to 65 to ensure column BM (index 64) exists
     if (cols.length < 65) continue;
     
     if (cols[1]?.trim() === examNo.trim() && password === "123456") {
@@ -89,73 +84,72 @@ async function fillReportCard(form, examNo, password) {
       const nextTermIndex = 7;
       const positionIndex = 62;
       const remarksIndex = 63;
-      const bmIndex = 64; // Column BM
+      const bmIndex = 64; 
       
-      // Determine the correct label based on the form
       let aggregateLabel = '';
       if (form.includes('Form1') || form.includes('Form2')) {
-        aggregateLabel = 'Aggregate grade';
+        aggregateLabel = 'Aggr. Grade';
       } else {
-        aggregateLabel = 'Aggregate points';
+        aggregateLabel = 'Aggr. Points';
       }
       
       const subjects = ['AGRI', 'BIBLE', 'BIO', 'CHE', 'CHI', 'HFC', 'ENG', 'HIS', 'GEO', 'S/LF', 'MAT', 'PHY', 'COM'];
       const schoolName = form.includes('ODL') ? 'MCHINJI SECONDARY SCHOOL ODL' : 'MCHINJI SECONDARY SCHOOL';
       
       let html = `
-        <h2 style="text-align:center;">Your examination results</h2>
+        <h2 style="text-align:center; font-size: 16px;">Your examination results</h2>
         
-        <div class="report-card-inner">
-          <div style="text-align: center;">
-            <h2 style="margin-top: 0;">REPORT CARD</h2>
-            <p><strong>${schoolName}</strong></p>
+        <div class="report-card-inner" style="box-sizing: border-box;">
+          <div style="text-align: center; margin-bottom: 10px;">
+            <h2 style="margin: 0; font-size: 18px;">REPORT CARD</h2>
+            <p style="margin: 2px 0; font-size: 13px;"><strong>${schoolName}</strong></p>
           </div>
           
-          <div style="display: flex; justify-content: space-between; margin-top: 15px; margin-bottom: 15px; text-align: left; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 200px;">
-              <p style="margin: 2px 0;"><strong>Name:</strong> ${cols[nameIndex] || '-'}</p>
-              <p style="margin: 2px 0;"><strong>Form:</strong> ${cols[formIndex]} &nbsp; <strong>Term:</strong> ${cols[termIndex]} &nbsp; <strong>Year:</strong> ${cols[yearIndex]}</p>
+          <!-- TIGHTENED FLEXBOX FOR MOBILE -->
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; text-align: left; font-size: 12px;">
+            <div style="flex: 1;">
+              <p style="margin: 1px 0;"><strong>Name:</strong> ${cols[nameIndex] || '-'}</p>
+              <p style="margin: 1px 0;"><strong>Form:</strong> ${cols[formIndex]} <strong>Term:</strong> ${cols[termIndex]} <strong>Yr:</strong> ${cols[yearIndex]}</p>
             </div>
-            <div style="flex: 1; min-width: 200px; text-align: right;">
-              <p style="margin: 2px 0;"><strong>POSITION IN CLASS:</strong> ${cols[positionIndex] || '-'}</p>
-              <!-- ADDED: The dynamic Aggregate Grade/Points element -->
-              <p style="margin: 2px 0;"><strong>${aggregateLabel}:</strong> ${cols[bmIndex] || '-'}</p>
-              <p style="margin: 2px 0;"><strong>OVERALL REMARKS:</strong> ${cols[remarksIndex] || '-'}</p>
+            <div style="flex: 1; text-align: right;">
+              <p style="margin: 1px 0;"><strong>Pos:</strong> ${cols[positionIndex] || '-'}</p>
+              <p style="margin: 1px 0;"><strong>${aggregateLabel}:</strong> ${cols[bmIndex] || '-'}</p>
+              <p style="margin: 1px 0;"><strong>Remarks:</strong> ${cols[remarksIndex] || '-'}</p>
             </div>
           </div>
 
-          <div style="overflow-x: auto;">
-            <table border="1">
+          <!-- TIGHTENED TABLE FOR MOBILE -->
+          <div style="overflow-x: hidden; width: 100%;">
+            <table border="1" style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 11px;">
               <tr>
-                <th>SUBJECT</th>
-                <th>AGGREGATE (%)</th>
-                <th>GRADE</th>
-                <th>POSITION</th>
-                <th>REMARKS</th>
+                <th style="padding: 4px;">SUBJ</th>
+                <th style="padding: 4px;">AGG (%)</th>
+                <th style="padding: 4px;">GRADE</th>
+                <th style="padding: 4px;">POS</th>
+                <th style="padding: 4px;">REM</th>
               </tr>
               ${subjects.map((subject, i) => {
                 const baseIndex = 10 + (i * 4);
                 return `
                   <tr>
-                    <td>${subject}</td>
-                    <td>${cols[baseIndex] || '-'}</td>
-                    <td>${cols[baseIndex + 1] || '-'}</td>
-                    <td>${cols[baseIndex + 2] || '-'}</td>
-                    <td>${cols[baseIndex + 3] || '-'}</td>
+                    <td style="padding: 3px; text-align: left; padding-left: 4px;">${subject}</td>
+                    <td style="padding: 3px;">${cols[baseIndex] || '-'}</td>
+                    <td style="padding: 3px;">${cols[baseIndex + 1] || '-'}</td>
+                    <td style="padding: 3px;">${cols[baseIndex + 2] || '-'}</td>
+                    <td style="padding: 3px;">${cols[baseIndex + 3] || '-'}</td>
                   </tr>
                 `;
               }).join('')}
             </table>
           </div>
-          <br>
-          <div style="text-align: left;">
+          <div style="text-align: left; font-size: 11px; margin-top: 10px;">
             <p style="margin: 2px 0;"><strong>HEADTEACHER:</strong> ${cols[headTeacherIndex] || '-'}</p>
-            <p style="margin: 2px 0;"><strong>BANK DETAILS FOR FEES PAYMENT:</strong> ${cols[bankDetailsIndex] || '-'}</p>
-            <p style="margin: 2px 0;"><strong>NEXT TERM OPENS ON:</strong> ${cols[nextTermIndex] || '-'}</p>
+            <p style="margin: 2px 0;"><strong>BANK DETAILS:</strong> ${cols[bankDetailsIndex] || '-'}</p>
+            <p style="margin: 2px 0;"><strong>NEXT TERM OPENS:</strong> ${cols[nextTermIndex] || '-'}</p>
           </div>
         </div>
         
-        <button id="downloadBtn" class="green-btn" style="margin-top: 15px;">Download Report Card</button>
+        <button id="downloadBtn" class="green-btn" style="margin-top: 15px; width: 100%;">Download Report Card</button>
       `;
       
       document.getElementById('result').innerHTML = html;
